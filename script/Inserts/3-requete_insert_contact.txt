@@ -6,7 +6,7 @@ VALUES
     ("0333333344","226","rue de la republique","NULL","69000","Lyon"),
     ("0222222233","271","rue de la fonderie","NULL","31000","Toulouse"),
     ("0555555566","63","rue voltaire","NULL","29000","Brest"),
-	("0747038672","148","Boulevard des Bardes","NULL","69000","Lyon"),
+    ("0747038672","148","Boulevard des Bardes","NULL","69000","Lyon"),
     ("0756531619","72","Voie du Pré","NULL","31000","Toulouse"),
     ("0659665315","278","Rue de la Falaise","NULL","80000","Amiens"),
     ("0602621602","271","Voie de la Nova","NULL","75000","Paris"),

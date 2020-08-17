@@ -1,0 +1,26 @@
+INSERT INTO ingredient
+    (name) 
+VALUES
+    ("Mozzarella"),
+    ("Jambon"),
+    ("Champignon"),
+    ("Merguez"),
+    ("Oignon rouge"),
+    ("Poivron"),
+    ("Artichaut"),
+    ("Tomate"),
+    ("Poulet"),
+    ("Oignon"),
+    ("Olive"),
+    ("Saumon fumé"),
+    ("Viande haché"),
+    ("Sauce curry"),
+    ("Creme fraiche"),
+    ("Poire"),
+    ("Roquefort"),
+    ("Miel"),
+    ("Noix"),
+    ("Sauce tomate"),
+    ("Anchois"),
+    ("Câpre"),
+    ("Oeuf");
