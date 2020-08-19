@@ -3,4 +3,5 @@ INSERT INTO payment_type
 VALUES
     ("Credit card"),
     ("Cash"),
-    ("Check");
+    ("Check"),
+    ("Pending");
