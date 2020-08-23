@@ -11,9 +11,9 @@ CREATE SEQUENCE public.pizza_id_seq;
 CREATE TABLE public.pizza (
                 id INTEGER NOT NULL DEFAULT nextval('public.pizza_id_seq'),
                 name VARCHAR(45) NOT NULL,
-                description TEXT NOT NULL,
+                description LONGNVARCHAR NOT NULL,
                 unit_price_ht NUMERIC(5,2) NOT NULL,
-                added_date TIMESTAMP NOT NULL,
+                added_date DATE NOT NULL,
                 CONSTRAINT pizza_pk PRIMARY KEY (id)
 );
 
@@ -24,8 +24,8 @@ CREATE TABLE public.reminder (
                 id INTEGER NOT NULL,
                 pizza_id INTEGER NOT NULL,
                 name VARCHAR(45) NOT NULL,
-                description TEXT NOT NULL,
-                added_date TIMESTAMP NOT NULL,
+                description LONGNVARCHAR NOT NULL,
+                added_date DATE NOT NULL,
                 CONSTRAINT reminder_pk PRIMARY KEY (id)
 );
 
@@ -84,7 +84,7 @@ CREATE TABLE public.restaurant (
                 contact_id INTEGER NOT NULL,
                 name VARCHAR(45) NOT NULL,
                 email VARCHAR(45) NOT NULL,
-                added_date TIMESTAMP NOT NULL,
+                added_date DATE NOT NULL,
                 CONSTRAINT restaurant_pk PRIMARY KEY (id)
 );
 
@@ -99,7 +99,7 @@ CREATE TABLE public.stock (
 
 CREATE TABLE public.status (
                 id INTEGER NOT NULL,
-                user_status VARCHAR(45) NOT NULL,
+                person_status VARCHAR(45) NOT NULL,
                 CONSTRAINT status_pk PRIMARY KEY (id)
 );
 
@@ -113,7 +113,7 @@ CREATE TABLE public.person (
                 login VARCHAR(45) NOT NULL,
                 password VARCHAR(45) NOT NULL,
                 email VARCHAR(90) NOT NULL,
-                added_date TIMESTAMP NOT NULL,
+                added_date DATE NOT NULL,
                 CONSTRAINT person_pk PRIMARY KEY (id)
 );
 
@@ -121,8 +121,8 @@ CREATE TABLE public.person (
 CREATE TABLE public.employee (
                 id INTEGER NOT NULL,
                 restaurant_id INTEGER NOT NULL,
-                user_id INTEGER NOT NULL,
                 role_id INTEGER NOT NULL,
+                person_id INTEGER NOT NULL,
                 CONSTRAINT employee_pk PRIMARY KEY (id)
 );
 
@@ -130,7 +130,7 @@ CREATE TABLE public.employee (
 CREATE TABLE public.customer (
                 id INTEGER NOT NULL,
                 contact_id INTEGER NOT NULL,
-                user_id INTEGER NOT NULL,
+                person_id INTEGER NOT NULL,
                 CONSTRAINT customer_pk PRIMARY KEY (id)
 );
 
@@ -139,11 +139,11 @@ CREATE SEQUENCE public.purchase_order_number_seq;
 
 CREATE TABLE public.purchase_order (
                 number INTEGER NOT NULL DEFAULT nextval('public.purchase_order_number_seq'),
-                customer_id INTEGER NOT NULL,
                 state_id INTEGER NOT NULL,
+                customer_id INTEGER NOT NULL,
                 paid_online SMALLINT NOT NULL,
                 delivery SMALLINT NOT NULL,
-                added_date TIMESTAMP NOT NULL,
+                added_date DATE NOT NULL,
                 CONSTRAINT purchase_order_pk PRIMARY KEY (number)
 );
 
@@ -152,8 +152,8 @@ ALTER SEQUENCE public.purchase_order_number_seq OWNED BY public.purchase_order.n
 
 CREATE TABLE public.item (
                 id INTEGER NOT NULL,
-                order_number INTEGER NOT NULL,
                 pizza_id INTEGER NOT NULL,
+                purchase_order_number INTEGER NOT NULL,
                 quantity SMALLINT NOT NULL,
                 rate_vat100 NUMERIC(4,2) NOT NULL,
                 CONSTRAINT item_pk PRIMARY KEY (id)
@@ -161,12 +161,12 @@ CREATE TABLE public.item (
 
 
 CREATE TABLE public.bill (
-                order_number INTEGER NOT NULL,
+                purchase_order_number INTEGER NOT NULL,
                 rate_vat100 NUMERIC(4,2) NOT NULL,
                 payment_type_id INTEGER NOT NULL,
                 restaurant_id INTEGER NOT NULL,
-                date TIMESTAMP NOT NULL,
-                CONSTRAINT bill_pk PRIMARY KEY (order_number)
+                date DATE NOT NULL,
+                CONSTRAINT bill_pk PRIMARY KEY (purchase_order_number)
 );
 
 
@@ -261,43 +261,43 @@ ON DELETE NO ACTION
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
-ALTER TABLE public.person ADD CONSTRAINT status_user_fk
+ALTER TABLE public.person ADD CONSTRAINT status_person_fk
 FOREIGN KEY (status_id)
 REFERENCES public.status (id)
 ON DELETE NO ACTION
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
-ALTER TABLE public.customer ADD CONSTRAINT user_customer_fk
-FOREIGN KEY (user_id)
+ALTER TABLE public.customer ADD CONSTRAINT person_customer_fk
+FOREIGN KEY (person_id)
 REFERENCES public.person (id)
 ON DELETE NO ACTION
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
-ALTER TABLE public.employee ADD CONSTRAINT user_employee_fk
-FOREIGN KEY (user_id)
+ALTER TABLE public.employee ADD CONSTRAINT person_employee_fk
+FOREIGN KEY (person_id)
 REFERENCES public.person (id)
 ON DELETE NO ACTION
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
-ALTER TABLE public.purchase_order ADD CONSTRAINT customer_order_fk
+ALTER TABLE public.purchase_order ADD CONSTRAINT customer_purchase_order_fk
 FOREIGN KEY (customer_id)
 REFERENCES public.customer (id)
 ON DELETE NO ACTION
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
-ALTER TABLE public.bill ADD CONSTRAINT order_bill_fk
-FOREIGN KEY (order_number)
+ALTER TABLE public.bill ADD CONSTRAINT purchase_order_bill_fk
+FOREIGN KEY (purchase_order_number)
 REFERENCES public.purchase_order (number)
 ON DELETE NO ACTION
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
-ALTER TABLE public.item ADD CONSTRAINT order_item_fk
-FOREIGN KEY (order_number)
+ALTER TABLE public.item ADD CONSTRAINT purchase_order_item_fk
+FOREIGN KEY (purchase_order_number)
 REFERENCES public.purchase_order (number)
 ON DELETE NO ACTION
 ON UPDATE NO ACTION

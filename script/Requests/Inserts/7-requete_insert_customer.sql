@@ -1,5 +1,5 @@
 INSERT INTO customer
-    (id,contact_id,user_id) 
+    (id,contact_id,person_id) 
 VALUES
     (1,'6','1'),
     (2,'7','2'),

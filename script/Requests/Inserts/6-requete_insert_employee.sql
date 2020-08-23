@@ -1,5 +1,5 @@
 INSERT INTO employee 
-    (id,restaurant_id,user_id,role_id) 
+    (id,restaurant_id,person_id,role_id) 
 VALUES
     (1,'1','3','2'),
     (2,'1','4','3'),
