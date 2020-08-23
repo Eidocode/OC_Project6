@@ -1,8 +1,8 @@
 INSERT INTO state
-    (order_state) 
+    (id,order_state) 
 VALUES
-    ("Awaiting for preparation"),
-    ("Preparation in progress"),
-    ("Awaiting for delivery"),
-    ("Delivery in progress"),
-    ("Order delivered");
+    (1,'Awaiting for preparation'),
+    (2,'Preparation in progress'),
+    (3,'Awaiting for delivery'),
+    (4,'Delivery in progress'),
+    (5,'Order delivered');
