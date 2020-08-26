@@ -1,5 +1,5 @@
-INSERT INTO person 
-    (id,title,lastname,firstname,login,password,email,added_date,status_id) 
+INSERT INTO oc_user 
+    (user_id,title,lastname,firstname,login,password,email,added_date,status_id) 
 VALUES
     (1,'Mme','Follet','Sabrina','sabfol','pass1','sabrina.follet@free.fr','2016-01-09 18:43:51','1'),
     (2,'Mlle','Bouzerar','Sarah','sarbou','pass2','sarah.bouzerar@yahoo.fr','2016-03-18 16:28:12','1'),

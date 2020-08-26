@@ -1,5 +1,5 @@
-INSERT INTO contact 
-    (id,phone_number,street_number,street_name,address_complement,postal_code,city) 
+INSERT INTO oc_contact 
+    (contact_id,phone_number,street_number,street_name,address_complement,postal_code,city) 
 VALUES
     (1,'0333333344','12','rue des jacobins','NULL','80000','Amiens'),
     (2,'0111111122','165','place pigalle','NULL','75000','Paris'),

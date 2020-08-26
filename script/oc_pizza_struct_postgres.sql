@@ -1,111 +1,137 @@
 
-CREATE TABLE public.ingredient (
-                id INTEGER NOT NULL,
+CREATE SEQUENCE public.oc_ingredient_id_seq;
+
+CREATE TABLE public.oc_ingredient (
+                ingredient_id INTEGER NOT NULL DEFAULT nextval('public.oc_ingredient_id_seq'),
                 name VARCHAR(45) NOT NULL,
-                CONSTRAINT ingredient_pk PRIMARY KEY (id)
+                CONSTRAINT oc_ingredient_pk PRIMARY KEY (ingredient_id)
 );
 
 
-CREATE SEQUENCE public.pizza_id_seq;
+ALTER SEQUENCE public.oc_ingredient_id_seq OWNED BY public.oc_ingredient.ingredient_id;
 
-CREATE TABLE public.pizza (
-                id INTEGER NOT NULL DEFAULT nextval('public.pizza_id_seq'),
+CREATE SEQUENCE public.oc_pizza_id_seq;
+
+CREATE TABLE public.oc_pizza (
+                pizza_id INTEGER NOT NULL DEFAULT nextval('public.oc_pizza_id_seq'),
                 name VARCHAR(45) NOT NULL,
-                description LONGNVARCHAR NOT NULL,
+                description TEXT NOT NULL,
                 unit_price_ht NUMERIC(5,2) NOT NULL,
-                added_date DATE NOT NULL,
-                CONSTRAINT pizza_pk PRIMARY KEY (id)
+                added_date TIMESTAMP NOT NULL,
+                CONSTRAINT oc_pizza_pk PRIMARY KEY (pizza_id)
 );
 
 
-ALTER SEQUENCE public.pizza_id_seq OWNED BY public.pizza.id;
+ALTER SEQUENCE public.oc_pizza_id_seq OWNED BY public.oc_pizza.pizza_id;
 
-CREATE TABLE public.reminder (
-                id INTEGER NOT NULL,
+CREATE SEQUENCE public.oc_reminder_id_seq;
+
+CREATE TABLE public.oc_reminder (
+                reminder_id INTEGER NOT NULL DEFAULT nextval('public.oc_reminder_id_seq'),
                 pizza_id INTEGER NOT NULL,
                 name VARCHAR(45) NOT NULL,
-                description LONGNVARCHAR NOT NULL,
-                added_date DATE NOT NULL,
-                CONSTRAINT reminder_pk PRIMARY KEY (id)
+                description TEXT NOT NULL,
+                added_date TIMESTAMP NOT NULL,
+                CONSTRAINT oc_reminder_pk PRIMARY KEY (reminder_id)
 );
 
 
-CREATE TABLE public.pizza_ingredient (
+ALTER SEQUENCE public.oc_reminder_id_seq OWNED BY public.oc_reminder.reminder_id;
+
+CREATE TABLE public.oc_pizza_ingredient (
                 pizza_id INTEGER NOT NULL,
                 ingredient_id INTEGER NOT NULL,
                 quantity SMALLINT NOT NULL,
-                CONSTRAINT pizza_ingredient_pk PRIMARY KEY (pizza_id, ingredient_id)
+                CONSTRAINT oc_pizza_ingredient_pk PRIMARY KEY (pizza_id, ingredient_id)
 );
 
 
-CREATE SEQUENCE public.payment_type_id_seq;
+CREATE SEQUENCE public.oc_payment_type_id_seq;
 
-CREATE TABLE public.payment_type (
-                id INTEGER NOT NULL DEFAULT nextval('public.payment_type_id_seq'),
-                type VARCHAR(45) NOT NULL,
-                CONSTRAINT payment_type_pk PRIMARY KEY (id)
+CREATE TABLE public.oc_payment_type (
+                payment_type_id INTEGER NOT NULL DEFAULT nextval('public.oc_payment_type_id_seq'),
+                payment_type VARCHAR(45) NOT NULL,
+                CONSTRAINT oc_payment_type_pk PRIMARY KEY (payment_type_id)
 );
 
 
-ALTER SEQUENCE public.payment_type_id_seq OWNED BY public.payment_type.id;
+ALTER SEQUENCE public.oc_payment_type_id_seq OWNED BY public.oc_payment_type.payment_type_id;
 
-CREATE SEQUENCE public.state_id_seq;
+CREATE SEQUENCE public.oc_order_state_id_seq_1;
 
-CREATE TABLE public.state (
-                id INTEGER NOT NULL DEFAULT nextval('public.state_id_seq'),
+CREATE TABLE public.oc_order_state (
+                order_state_id INTEGER NOT NULL DEFAULT nextval('public.oc_order_state_id_seq_1'),
                 order_state VARCHAR(45) NOT NULL,
-                CONSTRAINT state_pk PRIMARY KEY (id)
+                CONSTRAINT oc_order_state_pk PRIMARY KEY (order_state_id)
 );
 
 
-ALTER SEQUENCE public.state_id_seq OWNED BY public.state.id;
+ALTER SEQUENCE public.oc_order_state_id_seq_1 OWNED BY public.oc_order_state.order_state_id;
 
-CREATE TABLE public.role (
-                id INTEGER NOT NULL,
+CREATE SEQUENCE public.oc_role_id_seq;
+
+CREATE TABLE public.oc_role (
+                role_id INTEGER NOT NULL DEFAULT nextval('public.oc_role_id_seq'),
                 role VARCHAR(15) NOT NULL,
-                CONSTRAINT role_pk PRIMARY KEY (id)
+                CONSTRAINT oc_role_pk PRIMARY KEY (role_id)
 );
 
 
-CREATE TABLE public.contact (
-                id INTEGER NOT NULL,
+ALTER SEQUENCE public.oc_role_id_seq OWNED BY public.oc_role.role_id;
+
+CREATE SEQUENCE public.oc_contact_id_seq;
+
+CREATE TABLE public.oc_contact (
+                contact_id INTEGER NOT NULL DEFAULT nextval('public.oc_contact_id_seq'),
                 phone_number VARCHAR(10),
                 street_number VARCHAR(4),
                 street_name VARCHAR(60),
                 address_complement VARCHAR(90),
                 postal_code VARCHAR(5) NOT NULL,
                 city VARCHAR(15) NOT NULL,
-                CONSTRAINT contact_pk PRIMARY KEY (id)
+                CONSTRAINT oc_contact_pk PRIMARY KEY (contact_id)
 );
 
 
-CREATE TABLE public.restaurant (
-                id INTEGER NOT NULL,
+ALTER SEQUENCE public.oc_contact_id_seq OWNED BY public.oc_contact.contact_id;
+
+CREATE SEQUENCE public.oc_restaurant_id_seq;
+
+CREATE TABLE public.oc_restaurant (
+                restaurant_id INTEGER NOT NULL DEFAULT nextval('public.oc_restaurant_id_seq'),
                 contact_id INTEGER NOT NULL,
                 name VARCHAR(45) NOT NULL,
                 email VARCHAR(45) NOT NULL,
-                added_date DATE NOT NULL,
-                CONSTRAINT restaurant_pk PRIMARY KEY (id)
+                added_date TIMESTAMP NOT NULL,
+                CONSTRAINT oc_restaurant_pk PRIMARY KEY (restaurant_id)
 );
 
 
-CREATE TABLE public.stock (
+ALTER SEQUENCE public.oc_restaurant_id_seq OWNED BY public.oc_restaurant.restaurant_id;
+
+CREATE TABLE public.oc_stock (
                 ingredient_id INTEGER NOT NULL,
                 restaurant_id INTEGER NOT NULL,
                 quantity SMALLINT NOT NULL,
-                CONSTRAINT stock_pk PRIMARY KEY (ingredient_id, restaurant_id)
+                CONSTRAINT oc_stock_pk PRIMARY KEY (ingredient_id, restaurant_id)
 );
 
 
-CREATE TABLE public.status (
-                id INTEGER NOT NULL,
-                person_status VARCHAR(45) NOT NULL,
-                CONSTRAINT status_pk PRIMARY KEY (id)
+CREATE SEQUENCE public.oc_user_status_id_seq_1;
+
+CREATE TABLE public.oc_user_status (
+                user_status_id INTEGER NOT NULL DEFAULT nextval('public.oc_user_status_id_seq_1'),
+                user_status VARCHAR(45) NOT NULL,
+                CONSTRAINT oc_user_status_pk PRIMARY KEY (user_status_id)
 );
 
 
-CREATE TABLE public.person (
-                id INTEGER NOT NULL,
+ALTER SEQUENCE public.oc_user_status_id_seq_1 OWNED BY public.oc_user_status.user_status_id;
+
+CREATE SEQUENCE public.oc_user_id_seq;
+
+CREATE TABLE public.oc_user (
+                user_id INTEGER NOT NULL DEFAULT nextval('public.oc_user_id_seq'),
                 status_id INTEGER NOT NULL,
                 title VARCHAR(5),
                 lastname VARCHAR(50) NOT NULL,
@@ -113,192 +139,206 @@ CREATE TABLE public.person (
                 login VARCHAR(45) NOT NULL,
                 password VARCHAR(45) NOT NULL,
                 email VARCHAR(90) NOT NULL,
-                added_date DATE NOT NULL,
-                CONSTRAINT person_pk PRIMARY KEY (id)
+                added_date TIMESTAMP NOT NULL,
+                CONSTRAINT oc_user_pk PRIMARY KEY (user_id)
 );
 
 
-CREATE TABLE public.employee (
-                id INTEGER NOT NULL,
+ALTER SEQUENCE public.oc_user_id_seq OWNED BY public.oc_user.user_id;
+
+CREATE SEQUENCE public.oc_employee_id_seq;
+
+CREATE TABLE public.oc_employee (
+                employee_id INTEGER NOT NULL DEFAULT nextval('public.oc_employee_id_seq'),
                 restaurant_id INTEGER NOT NULL,
                 role_id INTEGER NOT NULL,
-                person_id INTEGER NOT NULL,
-                CONSTRAINT employee_pk PRIMARY KEY (id)
+                user_id INTEGER NOT NULL,
+                CONSTRAINT oc_employee_pk PRIMARY KEY (employee_id)
 );
 
 
-CREATE TABLE public.customer (
-                id INTEGER NOT NULL,
+ALTER SEQUENCE public.oc_employee_id_seq OWNED BY public.oc_employee.employee_id;
+
+CREATE SEQUENCE public.oc_customer_id_seq;
+
+CREATE TABLE public.oc_customer (
+                customer_id INTEGER NOT NULL DEFAULT nextval('public.oc_customer_id_seq'),
                 contact_id INTEGER NOT NULL,
-                person_id INTEGER NOT NULL,
-                CONSTRAINT customer_pk PRIMARY KEY (id)
+                user_id INTEGER NOT NULL,
+                CONSTRAINT oc_customer_pk PRIMARY KEY (customer_id)
 );
 
 
-CREATE SEQUENCE public.purchase_order_number_seq;
+ALTER SEQUENCE public.oc_customer_id_seq OWNED BY public.oc_customer.customer_id;
 
-CREATE TABLE public.purchase_order (
-                number INTEGER NOT NULL DEFAULT nextval('public.purchase_order_number_seq'),
-                state_id INTEGER NOT NULL,
+CREATE SEQUENCE public.oc_order_number_seq;
+
+CREATE TABLE public.oc_order (
+                order_id INTEGER NOT NULL DEFAULT nextval('public.oc_order_number_seq'),
+                order_state_id INTEGER NOT NULL,
                 customer_id INTEGER NOT NULL,
                 paid_online SMALLINT NOT NULL,
                 delivery SMALLINT NOT NULL,
-                added_date DATE NOT NULL,
-                CONSTRAINT purchase_order_pk PRIMARY KEY (number)
+                added_date TIMESTAMP NOT NULL,
+                CONSTRAINT oc_order_pk PRIMARY KEY (order_id)
 );
 
 
-ALTER SEQUENCE public.purchase_order_number_seq OWNED BY public.purchase_order.number;
+ALTER SEQUENCE public.oc_order_number_seq OWNED BY public.oc_order.order_id;
 
-CREATE TABLE public.item (
-                id INTEGER NOT NULL,
+CREATE SEQUENCE public.oc_item_id_seq;
+
+CREATE TABLE public.oc_item (
+                item_id INTEGER NOT NULL DEFAULT nextval('public.oc_item_id_seq'),
+                order_id INTEGER NOT NULL,
                 pizza_id INTEGER NOT NULL,
-                purchase_order_number INTEGER NOT NULL,
                 quantity SMALLINT NOT NULL,
                 rate_vat100 NUMERIC(4,2) NOT NULL,
-                CONSTRAINT item_pk PRIMARY KEY (id)
+                CONSTRAINT oc_item_pk PRIMARY KEY (item_id)
 );
 
 
-CREATE TABLE public.bill (
-                purchase_order_number INTEGER NOT NULL,
+ALTER SEQUENCE public.oc_item_id_seq OWNED BY public.oc_item.item_id;
+
+CREATE TABLE public.oc_bill (
+                order_id INTEGER NOT NULL,
                 rate_vat100 NUMERIC(4,2) NOT NULL,
                 payment_type_id INTEGER NOT NULL,
                 restaurant_id INTEGER NOT NULL,
-                date DATE NOT NULL,
-                CONSTRAINT bill_pk PRIMARY KEY (purchase_order_number)
+                date TIMESTAMP NOT NULL,
+                CONSTRAINT oc_bill_pk PRIMARY KEY (order_id)
 );
 
 
-ALTER TABLE public.pizza_ingredient ADD CONSTRAINT ingredient_pizza_ingredient_fk
+ALTER TABLE public.oc_pizza_ingredient ADD CONSTRAINT ingredient_pizza_ingredient_fk
 FOREIGN KEY (ingredient_id)
-REFERENCES public.ingredient (id)
+REFERENCES public.oc_ingredient (ingredient_id)
 ON DELETE NO ACTION
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
-ALTER TABLE public.stock ADD CONSTRAINT ingredient_stock_fk
+ALTER TABLE public.oc_stock ADD CONSTRAINT ingredient_stock_fk
 FOREIGN KEY (ingredient_id)
-REFERENCES public.ingredient (id)
+REFERENCES public.oc_ingredient (ingredient_id)
 ON DELETE NO ACTION
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
-ALTER TABLE public.item ADD CONSTRAINT pizza_item_fk
+ALTER TABLE public.oc_item ADD CONSTRAINT pizza_item_fk
 FOREIGN KEY (pizza_id)
-REFERENCES public.pizza (id)
+REFERENCES public.oc_pizza (pizza_id)
 ON DELETE NO ACTION
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
-ALTER TABLE public.pizza_ingredient ADD CONSTRAINT pizza_pizza_ingredient_fk
+ALTER TABLE public.oc_pizza_ingredient ADD CONSTRAINT pizza_pizza_ingredient_fk
 FOREIGN KEY (pizza_id)
-REFERENCES public.pizza (id)
+REFERENCES public.oc_pizza (pizza_id)
 ON DELETE NO ACTION
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
-ALTER TABLE public.reminder ADD CONSTRAINT pizza_reminder_fk
+ALTER TABLE public.oc_reminder ADD CONSTRAINT pizza_reminder_fk
 FOREIGN KEY (pizza_id)
-REFERENCES public.pizza (id)
+REFERENCES public.oc_pizza (pizza_id)
 ON DELETE NO ACTION
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
-ALTER TABLE public.bill ADD CONSTRAINT payment_type_bill_fk
+ALTER TABLE public.oc_bill ADD CONSTRAINT payment_type_bill_fk
 FOREIGN KEY (payment_type_id)
-REFERENCES public.payment_type (id)
+REFERENCES public.oc_payment_type (payment_type_id)
 ON DELETE NO ACTION
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
-ALTER TABLE public.purchase_order ADD CONSTRAINT state_order_fk
-FOREIGN KEY (state_id)
-REFERENCES public.state (id)
+ALTER TABLE public.oc_order ADD CONSTRAINT state_order_fk
+FOREIGN KEY (order_state_id)
+REFERENCES public.oc_order_state (order_state_id)
 ON DELETE NO ACTION
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
-ALTER TABLE public.employee ADD CONSTRAINT role_employee_fk
+ALTER TABLE public.oc_employee ADD CONSTRAINT role_employee_fk
 FOREIGN KEY (role_id)
-REFERENCES public.role (id)
+REFERENCES public.oc_role (role_id)
 ON DELETE NO ACTION
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
-ALTER TABLE public.customer ADD CONSTRAINT contact_customer_fk
+ALTER TABLE public.oc_customer ADD CONSTRAINT contact_customer_fk
 FOREIGN KEY (contact_id)
-REFERENCES public.contact (id)
+REFERENCES public.oc_contact (contact_id)
 ON DELETE NO ACTION
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
-ALTER TABLE public.restaurant ADD CONSTRAINT contact_restaurant_fk
+ALTER TABLE public.oc_restaurant ADD CONSTRAINT contact_restaurant_fk
 FOREIGN KEY (contact_id)
-REFERENCES public.contact (id)
+REFERENCES public.oc_contact (contact_id)
 ON DELETE NO ACTION
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
-ALTER TABLE public.employee ADD CONSTRAINT restaurant_employee_fk
+ALTER TABLE public.oc_employee ADD CONSTRAINT restaurant_employee_fk
 FOREIGN KEY (restaurant_id)
-REFERENCES public.restaurant (id)
+REFERENCES public.oc_restaurant (restaurant_id)
 ON DELETE NO ACTION
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
-ALTER TABLE public.bill ADD CONSTRAINT restaurant_bill_fk
+ALTER TABLE public.oc_bill ADD CONSTRAINT restaurant_bill_fk
 FOREIGN KEY (restaurant_id)
-REFERENCES public.restaurant (id)
+REFERENCES public.oc_restaurant (restaurant_id)
 ON DELETE NO ACTION
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
-ALTER TABLE public.stock ADD CONSTRAINT restaurant_stock_fk
+ALTER TABLE public.oc_stock ADD CONSTRAINT restaurant_stock_fk
 FOREIGN KEY (restaurant_id)
-REFERENCES public.restaurant (id)
+REFERENCES public.oc_restaurant (restaurant_id)
 ON DELETE NO ACTION
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
-ALTER TABLE public.person ADD CONSTRAINT status_person_fk
+ALTER TABLE public.oc_user ADD CONSTRAINT status_person_fk
 FOREIGN KEY (status_id)
-REFERENCES public.status (id)
+REFERENCES public.oc_user_status (user_status_id)
 ON DELETE NO ACTION
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
-ALTER TABLE public.customer ADD CONSTRAINT person_customer_fk
-FOREIGN KEY (person_id)
-REFERENCES public.person (id)
+ALTER TABLE public.oc_customer ADD CONSTRAINT person_customer_fk
+FOREIGN KEY (user_id)
+REFERENCES public.oc_user (user_id)
 ON DELETE NO ACTION
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
-ALTER TABLE public.employee ADD CONSTRAINT person_employee_fk
-FOREIGN KEY (person_id)
-REFERENCES public.person (id)
+ALTER TABLE public.oc_employee ADD CONSTRAINT person_employee_fk
+FOREIGN KEY (user_id)
+REFERENCES public.oc_user (user_id)
 ON DELETE NO ACTION
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
-ALTER TABLE public.purchase_order ADD CONSTRAINT customer_purchase_order_fk
+ALTER TABLE public.oc_order ADD CONSTRAINT customer_purchase_order_fk
 FOREIGN KEY (customer_id)
-REFERENCES public.customer (id)
+REFERENCES public.oc_customer (customer_id)
 ON DELETE NO ACTION
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
-ALTER TABLE public.bill ADD CONSTRAINT purchase_order_bill_fk
-FOREIGN KEY (purchase_order_number)
-REFERENCES public.purchase_order (number)
+ALTER TABLE public.oc_bill ADD CONSTRAINT purchase_order_bill_fk
+FOREIGN KEY (order_id)
+REFERENCES public.oc_order (order_id)
 ON DELETE NO ACTION
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
-ALTER TABLE public.item ADD CONSTRAINT purchase_order_item_fk
-FOREIGN KEY (purchase_order_number)
-REFERENCES public.purchase_order (number)
+ALTER TABLE public.oc_item ADD CONSTRAINT purchase_order_item_fk
+FOREIGN KEY (order_id)
+REFERENCES public.oc_order (order_id)
 ON DELETE NO ACTION
 ON UPDATE NO ACTION
 NOT DEFERRABLE;

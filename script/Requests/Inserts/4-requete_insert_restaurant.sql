@@ -1,5 +1,5 @@
-INSERT INTO restaurant
-    (id,name,email,added_date,contact_id) 
+INSERT INTO oc_restaurant
+    (restaurant_id,name,email,added_date,contact_id) 
 VALUES
     (1,'OC PIZZA Amiens','oc_pizza80@oc.com','2015-12-14 15:06:29','1'),
     (2,'OC PIZZA Paris','oc_pizza75@oc.com','2015-12-14 15:06:29','2'),

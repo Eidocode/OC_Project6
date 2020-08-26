@@ -1,5 +1,5 @@
-INSERT INTO purchase_order
-    (number,paid_online,delivery,added_date,customer_id,state_id) 
+INSERT INTO oc_order
+    (order_id,paid_online,delivery,added_date,customer_id,order_state_id) 
 VALUES 
     (1,1,0,'2019-03-06 13:54:01',65,5),
     (2,0,1,'2018-01-21 19:10:53',5,3),

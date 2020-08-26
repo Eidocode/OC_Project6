@@ -1,5 +1,5 @@
-INSERT INTO state
-    (id,order_state) 
+INSERT INTO oc_order_state
+    (order_state_id,order_state) 
 VALUES
     (1,'Awaiting for preparation'),
     (2,'Preparation in progress'),

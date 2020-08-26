@@ -1,5 +1,5 @@
-INSERT INTO item 
-    (id,order_number,pizza_id,quantity,rate_vat100) 
+INSERT INTO oc_item 
+    (item_id,order_id,pizza_id,quantity,rate_vat100) 
 VALUES 
     (1,76,4,3,10),
     (2,59,10,4,10),
@@ -82,7 +82,7 @@ VALUES
     (79,54,3,4,10),
     (80,70,10,3,10),
     (81,66,1,5,10),
-    (82,194,5,5,10),
+    (82,94,5,5,10),
     (83,53,8,1,10),
     (84,25,5,2,10),
     (85,92,9,3,10),

@@ -1,4 +1,4 @@
-INSERT INTO stock
+INSERT INTO oc_stock
     (ingredient_id,restaurant_id,quantity) 
 VALUES
     (1,1,6246),

@@ -1,7 +1,7 @@
-INSERT INTO payment_type
-    (type)
+INSERT INTO oc_payment_type
+    (payment_type_id, payment_type)
 VALUES
-    ("Credit card"),
-    ("Cash"),
-    ("Check"),
-    ("Pending");
+    (1,'Credit card'),
+    (2,'Cash'),
+    (3,'Check'),
+    (4,'Payment Pending');

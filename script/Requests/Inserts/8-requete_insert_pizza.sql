@@ -1,5 +1,5 @@
-INSERT INTO pizza 
-    (id,name,description,unit_price_ht,added_date) 
+INSERT INTO oc_pizza 
+    (pizza_id,name,description,unit_price_ht,added_date) 
 VALUES
     (1,'Margherita','Mozzarella',6.9,'2015-12-15 14:02:11'),
     (2,'Reine','Mozzarella - Jambon - Champignons',10.9,'2015-12-15 14:09:23'),

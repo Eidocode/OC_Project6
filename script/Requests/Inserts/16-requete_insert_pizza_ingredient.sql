@@ -1,4 +1,4 @@
-INSERT INTO pizza_ingredient
+INSERT INTO oc_pizza_ingredient
     (pizza_id,ingredient_id,quantity) 
 VALUES
     (1,1,200),
