@@ -1,4 +1,14 @@
 
+CREATE DATABASE oc_pizza
+    WITH 
+    OWNER = student
+    ENCODING = 'UTF8'
+    LC_COLLATE = 'fr_FR.UTF-8'
+    LC_CTYPE = 'fr_FR.UTF-8'
+    TABLESPACE = pg_default
+    CONNECTION LIMIT = -1;
+
+
 CREATE SEQUENCE public.oc_ingredient_id_seq;
 
 CREATE TABLE public.oc_ingredient (
