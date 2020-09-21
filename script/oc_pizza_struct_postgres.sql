@@ -1,3 +1,6 @@
+-- -----------------------------------------------------
+-- Database oc_pizza
+-- -----------------------------------------------------
 
 CREATE DATABASE oc_pizza
     WITH 
@@ -9,6 +12,10 @@ CREATE DATABASE oc_pizza
     CONNECTION LIMIT = -1;
 
 
+-- -----------------------------------------------------
+-- Table `oc_ingredient`
+-- -----------------------------------------------------
+
 CREATE SEQUENCE public.oc_ingredient_id_seq;
 
 CREATE TABLE public.oc_ingredient (
@@ -19,6 +26,11 @@ CREATE TABLE public.oc_ingredient (
 
 
 ALTER SEQUENCE public.oc_ingredient_id_seq OWNED BY public.oc_ingredient.ingredient_id;
+
+
+-- -----------------------------------------------------
+-- Table `oc_pizza`
+-- -----------------------------------------------------
 
 CREATE SEQUENCE public.oc_pizza_id_seq;
 
@@ -34,6 +46,11 @@ CREATE TABLE public.oc_pizza (
 
 ALTER SEQUENCE public.oc_pizza_id_seq OWNED BY public.oc_pizza.pizza_id;
 
+
+-- -----------------------------------------------------
+-- Table `oc_reminder`
+-- -----------------------------------------------------
+
 CREATE SEQUENCE public.oc_reminder_id_seq;
 
 CREATE TABLE public.oc_reminder (
@@ -48,6 +65,11 @@ CREATE TABLE public.oc_reminder (
 
 ALTER SEQUENCE public.oc_reminder_id_seq OWNED BY public.oc_reminder.reminder_id;
 
+
+-- -----------------------------------------------------
+-- Table `oc_pizza_ingredient`
+-- -----------------------------------------------------
+
 CREATE TABLE public.oc_pizza_ingredient (
                 pizza_id INTEGER NOT NULL,
                 ingredient_id INTEGER NOT NULL,
@@ -55,6 +77,10 @@ CREATE TABLE public.oc_pizza_ingredient (
                 CONSTRAINT oc_pizza_ingredient_pk PRIMARY KEY (pizza_id, ingredient_id)
 );
 
+
+-- -----------------------------------------------------
+-- Table `oc_payment_type`
+-- -----------------------------------------------------
 
 CREATE SEQUENCE public.oc_payment_type_id_seq;
 
@@ -67,6 +93,11 @@ CREATE TABLE public.oc_payment_type (
 
 ALTER SEQUENCE public.oc_payment_type_id_seq OWNED BY public.oc_payment_type.payment_type_id;
 
+
+-- -----------------------------------------------------
+-- Table `oc_order_state`
+-- -----------------------------------------------------
+
 CREATE SEQUENCE public.oc_order_state_id_seq_1;
 
 CREATE TABLE public.oc_order_state (
@@ -78,6 +109,11 @@ CREATE TABLE public.oc_order_state (
 
 ALTER SEQUENCE public.oc_order_state_id_seq_1 OWNED BY public.oc_order_state.order_state_id;
 
+
+-- -----------------------------------------------------
+-- Table `oc_role`
+-- -----------------------------------------------------
+
 CREATE SEQUENCE public.oc_role_id_seq;
 
 CREATE TABLE public.oc_role (
@@ -88,6 +124,11 @@ CREATE TABLE public.oc_role (
 
 
 ALTER SEQUENCE public.oc_role_id_seq OWNED BY public.oc_role.role_id;
+
+
+-- -----------------------------------------------------
+-- Table `oc_contact`
+-- -----------------------------------------------------
 
 CREATE SEQUENCE public.oc_contact_id_seq;
 
@@ -105,6 +146,11 @@ CREATE TABLE public.oc_contact (
 
 ALTER SEQUENCE public.oc_contact_id_seq OWNED BY public.oc_contact.contact_id;
 
+
+-- -----------------------------------------------------
+-- Table `oc_restaurant`
+-- -----------------------------------------------------
+
 CREATE SEQUENCE public.oc_restaurant_id_seq;
 
 CREATE TABLE public.oc_restaurant (
@@ -119,6 +165,11 @@ CREATE TABLE public.oc_restaurant (
 
 ALTER SEQUENCE public.oc_restaurant_id_seq OWNED BY public.oc_restaurant.restaurant_id;
 
+
+-- -----------------------------------------------------
+-- Table `oc_stock`
+-- -----------------------------------------------------
+
 CREATE TABLE public.oc_stock (
                 ingredient_id INTEGER NOT NULL,
                 restaurant_id INTEGER NOT NULL,
@@ -126,6 +177,10 @@ CREATE TABLE public.oc_stock (
                 CONSTRAINT oc_stock_pk PRIMARY KEY (ingredient_id, restaurant_id)
 );
 
+
+-- -----------------------------------------------------
+-- Table `oc_user_status`
+-- -----------------------------------------------------
 
 CREATE SEQUENCE public.oc_user_status_id_seq_1;
 
@@ -137,6 +192,11 @@ CREATE TABLE public.oc_user_status (
 
 
 ALTER SEQUENCE public.oc_user_status_id_seq_1 OWNED BY public.oc_user_status.user_status_id;
+
+
+-- -----------------------------------------------------
+-- Table `oc_user`
+-- -----------------------------------------------------
 
 CREATE SEQUENCE public.oc_user_id_seq;
 
@@ -156,6 +216,11 @@ CREATE TABLE public.oc_user (
 
 ALTER SEQUENCE public.oc_user_id_seq OWNED BY public.oc_user.user_id;
 
+
+-- -----------------------------------------------------
+-- Table `oc_employee`
+-- -----------------------------------------------------
+
 CREATE SEQUENCE public.oc_employee_id_seq;
 
 CREATE TABLE public.oc_employee (
@@ -169,6 +234,11 @@ CREATE TABLE public.oc_employee (
 
 ALTER SEQUENCE public.oc_employee_id_seq OWNED BY public.oc_employee.employee_id;
 
+
+-- -----------------------------------------------------
+-- Table `oc_customer`
+-- -----------------------------------------------------
+
 CREATE SEQUENCE public.oc_customer_id_seq;
 
 CREATE TABLE public.oc_customer (
@@ -180,6 +250,11 @@ CREATE TABLE public.oc_customer (
 
 
 ALTER SEQUENCE public.oc_customer_id_seq OWNED BY public.oc_customer.customer_id;
+
+
+-- -----------------------------------------------------
+-- Table `oc_order`
+-- -----------------------------------------------------
 
 CREATE SEQUENCE public.oc_order_number_seq;
 
@@ -196,6 +271,11 @@ CREATE TABLE public.oc_order (
 
 ALTER SEQUENCE public.oc_order_number_seq OWNED BY public.oc_order.order_id;
 
+
+-- -----------------------------------------------------
+-- Table `oc_item`
+-- -----------------------------------------------------
+
 CREATE SEQUENCE public.oc_item_id_seq;
 
 CREATE TABLE public.oc_item (
@@ -210,6 +290,11 @@ CREATE TABLE public.oc_item (
 
 ALTER SEQUENCE public.oc_item_id_seq OWNED BY public.oc_item.item_id;
 
+
+-- -----------------------------------------------------
+-- Table `oc_bill`
+-- -----------------------------------------------------
+
 CREATE TABLE public.oc_bill (
                 order_id INTEGER NOT NULL,
                 rate_vat100 NUMERIC(4,2) NOT NULL,
@@ -219,6 +304,11 @@ CREATE TABLE public.oc_bill (
                 CONSTRAINT oc_bill_pk PRIMARY KEY (order_id)
 );
 
+
+
+-- -----------------------------------------------------
+-- Constraints
+-- -----------------------------------------------------
 
 ALTER TABLE public.oc_pizza_ingredient ADD CONSTRAINT ingredient_pizza_ingredient_fk
 FOREIGN KEY (ingredient_id)
