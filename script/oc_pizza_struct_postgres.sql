@@ -2,16 +2,6 @@
 -- Database oc_pizza
 -- -----------------------------------------------------
 
-CREATE DATABASE oc_pizza
-    WITH 
-    OWNER = student
-    ENCODING = 'UTF8'
-    LC_COLLATE = 'fr_FR.UTF-8'
-    LC_CTYPE = 'fr_FR.UTF-8'
-    TABLESPACE = pg_default
-    CONNECTION LIMIT = -1;
-
-
 -- -----------------------------------------------------
 -- Table `oc_ingredient`
 -- -----------------------------------------------------
@@ -27,7 +17,6 @@ CREATE TABLE public.oc_ingredient (
 
 ALTER SEQUENCE public.oc_ingredient_id_seq OWNED BY public.oc_ingredient.ingredient_id;
 
-
 -- -----------------------------------------------------
 -- Table `oc_pizza`
 -- -----------------------------------------------------
@@ -38,14 +27,14 @@ CREATE TABLE public.oc_pizza (
                 pizza_id INTEGER NOT NULL DEFAULT nextval('public.oc_pizza_id_seq'),
                 name VARCHAR(45) NOT NULL,
                 description TEXT NOT NULL,
-                unit_price_ht NUMERIC(5,2) NOT NULL,
+                price_ht NUMERIC(5,2) NOT NULL,
+                rate_VAT100 NUMERIC(4,2) NOT NULL,
                 added_date TIMESTAMP NOT NULL,
                 CONSTRAINT oc_pizza_pk PRIMARY KEY (pizza_id)
 );
 
 
 ALTER SEQUENCE public.oc_pizza_id_seq OWNED BY public.oc_pizza.pizza_id;
-
 
 -- -----------------------------------------------------
 -- Table `oc_reminder`
@@ -65,7 +54,6 @@ CREATE TABLE public.oc_reminder (
 
 ALTER SEQUENCE public.oc_reminder_id_seq OWNED BY public.oc_reminder.reminder_id;
 
-
 -- -----------------------------------------------------
 -- Table `oc_pizza_ingredient`
 -- -----------------------------------------------------
@@ -76,7 +64,6 @@ CREATE TABLE public.oc_pizza_ingredient (
                 quantity SMALLINT NOT NULL,
                 CONSTRAINT oc_pizza_ingredient_pk PRIMARY KEY (pizza_id, ingredient_id)
 );
-
 
 -- -----------------------------------------------------
 -- Table `oc_payment_type`
@@ -93,7 +80,6 @@ CREATE TABLE public.oc_payment_type (
 
 ALTER SEQUENCE public.oc_payment_type_id_seq OWNED BY public.oc_payment_type.payment_type_id;
 
-
 -- -----------------------------------------------------
 -- Table `oc_order_state`
 -- -----------------------------------------------------
@@ -109,7 +95,6 @@ CREATE TABLE public.oc_order_state (
 
 ALTER SEQUENCE public.oc_order_state_id_seq_1 OWNED BY public.oc_order_state.order_state_id;
 
-
 -- -----------------------------------------------------
 -- Table `oc_role`
 -- -----------------------------------------------------
@@ -124,7 +109,6 @@ CREATE TABLE public.oc_role (
 
 
 ALTER SEQUENCE public.oc_role_id_seq OWNED BY public.oc_role.role_id;
-
 
 -- -----------------------------------------------------
 -- Table `oc_contact`
@@ -146,10 +130,10 @@ CREATE TABLE public.oc_contact (
 
 ALTER SEQUENCE public.oc_contact_id_seq OWNED BY public.oc_contact.contact_id;
 
-
 -- -----------------------------------------------------
 -- Table `oc_restaurant`
 -- -----------------------------------------------------
+
 
 CREATE SEQUENCE public.oc_restaurant_id_seq;
 
@@ -165,7 +149,6 @@ CREATE TABLE public.oc_restaurant (
 
 ALTER SEQUENCE public.oc_restaurant_id_seq OWNED BY public.oc_restaurant.restaurant_id;
 
-
 -- -----------------------------------------------------
 -- Table `oc_stock`
 -- -----------------------------------------------------
@@ -176,7 +159,6 @@ CREATE TABLE public.oc_stock (
                 quantity SMALLINT NOT NULL,
                 CONSTRAINT oc_stock_pk PRIMARY KEY (ingredient_id, restaurant_id)
 );
-
 
 -- -----------------------------------------------------
 -- Table `oc_user_status`
@@ -192,7 +174,6 @@ CREATE TABLE public.oc_user_status (
 
 
 ALTER SEQUENCE public.oc_user_status_id_seq_1 OWNED BY public.oc_user_status.user_status_id;
-
 
 -- -----------------------------------------------------
 -- Table `oc_user`
@@ -216,7 +197,6 @@ CREATE TABLE public.oc_user (
 
 ALTER SEQUENCE public.oc_user_id_seq OWNED BY public.oc_user.user_id;
 
-
 -- -----------------------------------------------------
 -- Table `oc_employee`
 -- -----------------------------------------------------
@@ -234,7 +214,6 @@ CREATE TABLE public.oc_employee (
 
 ALTER SEQUENCE public.oc_employee_id_seq OWNED BY public.oc_employee.employee_id;
 
-
 -- -----------------------------------------------------
 -- Table `oc_customer`
 -- -----------------------------------------------------
@@ -251,7 +230,6 @@ CREATE TABLE public.oc_customer (
 
 ALTER SEQUENCE public.oc_customer_id_seq OWNED BY public.oc_customer.customer_id;
 
-
 -- -----------------------------------------------------
 -- Table `oc_order`
 -- -----------------------------------------------------
@@ -265,31 +243,24 @@ CREATE TABLE public.oc_order (
                 paid_online SMALLINT NOT NULL,
                 delivery SMALLINT NOT NULL,
                 added_date TIMESTAMP NOT NULL,
+                emp_prep INTEGER NOT NULL,
+                emp_deliv INTEGER,
                 CONSTRAINT oc_order_pk PRIMARY KEY (order_id)
 );
 
 
 ALTER SEQUENCE public.oc_order_number_seq OWNED BY public.oc_order.order_id;
 
-
 -- -----------------------------------------------------
--- Table `oc_item`
+-- Table `oc_order_pizza`
 -- -----------------------------------------------------
 
-CREATE SEQUENCE public.oc_item_id_seq;
-
-CREATE TABLE public.oc_item (
-                item_id INTEGER NOT NULL DEFAULT nextval('public.oc_item_id_seq'),
-                order_id INTEGER NOT NULL,
-                pizza_id INTEGER NOT NULL,
+CREATE TABLE public.oc_order_pizza (
+                oc_order_order_id INTEGER NOT NULL,
+                oc_pizza_pizza_id INTEGER NOT NULL,
                 quantity SMALLINT NOT NULL,
-                rate_vat100 NUMERIC(4,2) NOT NULL,
-                CONSTRAINT oc_item_pk PRIMARY KEY (item_id)
+                CONSTRAINT oc_order_pizza_pk PRIMARY KEY (oc_order_order_id, oc_pizza_pizza_id)
 );
-
-
-ALTER SEQUENCE public.oc_item_id_seq OWNED BY public.oc_item.item_id;
-
 
 -- -----------------------------------------------------
 -- Table `oc_bill`
@@ -303,8 +274,6 @@ CREATE TABLE public.oc_bill (
                 date TIMESTAMP NOT NULL,
                 CONSTRAINT oc_bill_pk PRIMARY KEY (order_id)
 );
-
-
 
 -- -----------------------------------------------------
 -- Constraints
@@ -324,13 +293,6 @@ ON DELETE NO ACTION
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
-ALTER TABLE public.oc_item ADD CONSTRAINT pizza_item_fk
-FOREIGN KEY (pizza_id)
-REFERENCES public.oc_pizza (pizza_id)
-ON DELETE NO ACTION
-ON UPDATE NO ACTION
-NOT DEFERRABLE;
-
 ALTER TABLE public.oc_pizza_ingredient ADD CONSTRAINT pizza_pizza_ingredient_fk
 FOREIGN KEY (pizza_id)
 REFERENCES public.oc_pizza (pizza_id)
@@ -340,6 +302,13 @@ NOT DEFERRABLE;
 
 ALTER TABLE public.oc_reminder ADD CONSTRAINT pizza_reminder_fk
 FOREIGN KEY (pizza_id)
+REFERENCES public.oc_pizza (pizza_id)
+ON DELETE NO ACTION
+ON UPDATE NO ACTION
+NOT DEFERRABLE;
+
+ALTER TABLE public.oc_order_pizza ADD CONSTRAINT oc_pizza_oc_order_pizza_fk
+FOREIGN KEY (oc_pizza_pizza_id)
 REFERENCES public.oc_pizza (pizza_id)
 ON DELETE NO ACTION
 ON UPDATE NO ACTION
@@ -422,6 +391,20 @@ ON DELETE NO ACTION
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
+ALTER TABLE public.oc_order ADD CONSTRAINT oc_employee_oc_order_fk
+FOREIGN KEY (emp_prep)
+REFERENCES public.oc_employee (employee_id)
+ON DELETE NO ACTION
+ON UPDATE NO ACTION
+NOT DEFERRABLE;
+
+ALTER TABLE public.oc_order ADD CONSTRAINT oc_employee_oc_order_fk1
+FOREIGN KEY (emp_deliv)
+REFERENCES public.oc_employee (employee_id)
+ON DELETE NO ACTION
+ON UPDATE NO ACTION
+NOT DEFERRABLE;
+
 ALTER TABLE public.oc_order ADD CONSTRAINT customer_purchase_order_fk
 FOREIGN KEY (customer_id)
 REFERENCES public.oc_customer (customer_id)
@@ -436,8 +419,8 @@ ON DELETE NO ACTION
 ON UPDATE NO ACTION
 NOT DEFERRABLE;
 
-ALTER TABLE public.oc_item ADD CONSTRAINT purchase_order_item_fk
-FOREIGN KEY (order_id)
+ALTER TABLE public.oc_order_pizza ADD CONSTRAINT oc_order_oc_order_pizza_fk
+FOREIGN KEY (oc_order_order_id)
 REFERENCES public.oc_order (order_id)
 ON DELETE NO ACTION
 ON UPDATE NO ACTION

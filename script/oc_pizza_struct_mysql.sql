@@ -1,21 +1,16 @@
-
 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
 
-
 -- -----------------------------------------------------
 -- Database oc_pizza
 -- -----------------------------------------------------
-
 CREATE SCHEMA IF NOT EXISTS `oc_pizza` DEFAULT CHARACTER SET utf8 ;
 USE `oc_pizza` ;
-
 
 -- -----------------------------------------------------
 -- Table `oc_contact`
 -- -----------------------------------------------------
-
 CREATE TABLE IF NOT EXISTS `oc_pizza`.`oc_contact` (
   `contact_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `phone_number` VARCHAR(10) NULL,
@@ -31,7 +26,6 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `oc_user_status`
 -- -----------------------------------------------------
-
 CREATE TABLE IF NOT EXISTS `oc_pizza`.`oc_user_status` (
   `user_status_id` INT NOT NULL AUTO_INCREMENT,
   `user_status` VARCHAR(45) NOT NULL,
@@ -43,7 +37,6 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `oc_user`
 -- -----------------------------------------------------
-
 CREATE TABLE IF NOT EXISTS `oc_pizza`.`oc_user` (
   `user_id` INT NOT NULL AUTO_INCREMENT,
   `status_id` INT NOT NULL,
@@ -69,7 +62,6 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `oc_customer`
 -- -----------------------------------------------------
-
 CREATE TABLE IF NOT EXISTS `oc_pizza`.`oc_customer` (
   `customer_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `contact_id` INT UNSIGNED NOT NULL,
@@ -93,7 +85,6 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `oc_restaurant`
 -- -----------------------------------------------------
-
 CREATE TABLE IF NOT EXISTS `oc_pizza`.`oc_restaurant` (
   `restaurant_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `contact_id` INT UNSIGNED NOT NULL,
@@ -115,7 +106,6 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `oc_role`
 -- -----------------------------------------------------
-
 CREATE TABLE IF NOT EXISTS `oc_pizza`.`oc_role` (
   `role_id` INT NOT NULL AUTO_INCREMENT,
   `role` VARCHAR(15) NOT NULL,
@@ -127,7 +117,6 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `oc_employee`
 -- -----------------------------------------------------
-
 CREATE TABLE IF NOT EXISTS `oc_pizza`.`oc_employee` (
   `employee_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `restaurant_id` INT UNSIGNED NOT NULL,
@@ -158,7 +147,6 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `oc_order_state`
 -- -----------------------------------------------------
-
 CREATE TABLE IF NOT EXISTS `oc_pizza`.`oc_order_state` (
   `order_state_id` INT NOT NULL AUTO_INCREMENT,
   `order_state` VARCHAR(45) NOT NULL,
@@ -170,17 +158,20 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `oc_order`
 -- -----------------------------------------------------
-
 CREATE TABLE IF NOT EXISTS `oc_pizza`.`oc_order` (
   `order_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `customer_id` INT UNSIGNED NOT NULL,
   `order_state_id` INT NOT NULL,
+  `emp_prep` INT UNSIGNED NOT NULL,
+  `emp_deliv` INT UNSIGNED NULL,
   `paid_online` TINYINT(1) NOT NULL DEFAULT 0,
   `delivery` TINYINT(1) NOT NULL DEFAULT 0,
   `added_date` DATETIME NOT NULL DEFAULT NOW(),
   PRIMARY KEY (`order_id`),
   INDEX `fk_order_customer1_idx` (`customer_id` ASC),
   INDEX `fk_order_state1_idx` (`order_state_id` ASC),
+  INDEX `fk_oc_order_oc_employee1_idx` (`emp_deliv` ASC),
+  INDEX `fk_oc_order_oc_employee2_idx` (`emp_prep` ASC),
   CONSTRAINT `fk_order_customer1`
     FOREIGN KEY (`customer_id`)
     REFERENCES `oc_pizza`.`oc_customer` (`customer_id`)
@@ -190,6 +181,16 @@ CREATE TABLE IF NOT EXISTS `oc_pizza`.`oc_order` (
     FOREIGN KEY (`order_state_id`)
     REFERENCES `oc_pizza`.`oc_order_state` (`order_state_id`)
     ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_oc_order_oc_employee1`
+    FOREIGN KEY (`emp_deliv`)
+    REFERENCES `oc_pizza`.`oc_employee` (`employee_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_oc_order_oc_employee2`
+    FOREIGN KEY (`emp_prep`)
+    REFERENCES `oc_pizza`.`oc_employee` (`employee_id`)
+    ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
@@ -197,48 +198,21 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `oc_pizza`
 -- -----------------------------------------------------
-
 CREATE TABLE IF NOT EXISTS `oc_pizza`.`oc_pizza` (
   `pizza_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(45) NOT NULL,
   `description` TEXT NOT NULL,
-  `unit_price_ht` DECIMAL(5,2) NOT NULL,
+  `price_ht` DECIMAL(5,2) NOT NULL,
   `added_date` DATETIME NOT NULL DEFAULT NOW(),
+  `rate_VAT100` DECIMAL(4,2) NOT NULL,
   PRIMARY KEY (`pizza_id`),
   UNIQUE INDEX `name_UNIQUE` (`name` ASC))
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `oc_item`
--- -----------------------------------------------------
-
-CREATE TABLE IF NOT EXISTS `oc_pizza`.`oc_item` (
-  `item_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `order_id` INT UNSIGNED NOT NULL,
-  `pizza_id` INT UNSIGNED NOT NULL,
-  `quantity` TINYINT UNSIGNED NOT NULL,
-  `rate_vat100` DECIMAL(4,2) NOT NULL,
-  PRIMARY KEY (`item_id`),
-  INDEX `fk_item_order1_idx` (`order_id` ASC),
-  INDEX `fk_item_pizza1_idx` (`pizza_id` ASC),
-  CONSTRAINT `fk_item_order1`
-    FOREIGN KEY (`order_id`)
-    REFERENCES `oc_pizza`.`oc_order` (`order_id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_item_pizza1`
-    FOREIGN KEY (`pizza_id`)
-    REFERENCES `oc_pizza`.`oc_pizza` (`pizza_id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
 -- Table `oc_ingredient`
 -- -----------------------------------------------------
-
 CREATE TABLE IF NOT EXISTS `oc_pizza`.`oc_ingredient` (
   `ingredient_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(45) NOT NULL,
@@ -250,7 +224,6 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `oc_reminder`
 -- -----------------------------------------------------
-
 CREATE TABLE IF NOT EXISTS `oc_pizza`.`oc_reminder` (
   `reminder_id` INT NOT NULL AUTO_INCREMENT,
   `pizza_id` INT UNSIGNED NOT NULL,
@@ -271,7 +244,6 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `oc_payment_type`
 -- -----------------------------------------------------
-
 CREATE TABLE IF NOT EXISTS `oc_pizza`.`oc_payment_type` (
   `payment_type_id` INT NOT NULL AUTO_INCREMENT,
   `payment_type` VARCHAR(45) NOT NULL,
@@ -283,7 +255,6 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `oc_bill`
 -- -----------------------------------------------------
-
 CREATE TABLE IF NOT EXISTS `oc_pizza`.`oc_bill` (
   `order_id` INT UNSIGNED NOT NULL,
   `payment_type_id` INT NOT NULL DEFAULT 4,
@@ -314,7 +285,6 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `oc_pizza_ingredient`
 -- -----------------------------------------------------
-
 CREATE TABLE IF NOT EXISTS `oc_pizza`.`oc_pizza_ingredient` (
   `pizza_id` INT UNSIGNED NOT NULL,
   `ingredient_id` INT UNSIGNED NOT NULL,
@@ -338,7 +308,6 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `oc_stock`
 -- -----------------------------------------------------
-
 CREATE TABLE IF NOT EXISTS `oc_pizza`.`oc_stock` (
   `ingredient_id` INT UNSIGNED NOT NULL,
   `restaurant_id` INT UNSIGNED NOT NULL,
@@ -354,6 +323,29 @@ CREATE TABLE IF NOT EXISTS `oc_pizza`.`oc_stock` (
   CONSTRAINT `fk_ingredient_has_restaurant_restaurant1`
     FOREIGN KEY (`restaurant_id`)
     REFERENCES `oc_pizza`.`oc_restaurant` (`restaurant_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `oc_order_pizza`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `oc_pizza`.`oc_order_pizza` (
+  `oc_order_order_id` INT UNSIGNED NOT NULL,
+  `oc_pizza_pizza_id` INT UNSIGNED NOT NULL,
+  `quantity` SMALLINT NULL,
+  PRIMARY KEY (`oc_order_order_id`, `oc_pizza_pizza_id`),
+  INDEX `fk_oc_order_pizza_oc_order1_idx` (`oc_order_order_id` ASC),
+  INDEX `fk_oc_order_pizza_oc_pizza1_idx` (`oc_pizza_pizza_id` ASC),
+  CONSTRAINT `fk_oc_order_pizza_oc_order1`
+    FOREIGN KEY (`oc_order_order_id`)
+    REFERENCES `oc_pizza`.`oc_order` (`order_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_oc_order_pizza_oc_pizza1`
+    FOREIGN KEY (`oc_pizza_pizza_id`)
+    REFERENCES `oc_pizza`.`oc_pizza` (`pizza_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
